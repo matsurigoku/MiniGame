@@ -1,6 +1,6 @@
 # MiniGame
 
-Still in planning progress, might expect huge chnage in the future. 🤠
+Still in planning progress, might expect huge chnage in the future. 
 
 ## goal
 
