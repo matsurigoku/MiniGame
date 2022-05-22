@@ -6,7 +6,7 @@ Still in planning progress, might expect huge chnage in the future. 🤠
 
  - object oriented approach
 
- - modern c++ technique (optional)
+ - modern c++ technique 
 
 ## requirement
 
