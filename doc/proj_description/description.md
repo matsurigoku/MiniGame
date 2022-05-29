@@ -8,6 +8,8 @@ We are still deciding our project topic.
 
 ## proposal
 
+ - TypingTest
+
  - TicTacToe
 
  - SnakeGame
@@ -22,6 +24,4 @@ We decide to make a small project to practice our skill.
 
 ## goal
 
- - object oriented approach
-
- - modern c++ technique (optional)
+ - use javascript & html to create a minigame

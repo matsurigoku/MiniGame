@@ -4,15 +4,11 @@ Still in planning progress, might expect huge chnage in the future.
 
 ## goal
 
- - object oriented approach
-
- - modern c++ technique 
+ - use javascript & html to create a minigame
 
 ## requirement
 
  - [git-scm](https://git-scm.com/)
-
- - [tdm-gcc](https://jmeubank.github.io/tdm-gcc/)
 
 ## how to compile
 
