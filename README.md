@@ -1,20 +1,10 @@
-# MiniGame
+# TailwindPractice
 
-Still in planning progress, might expect huge chnage in the future. 
+We want to use tailwindcss to implement our existing project appearance. 
 
 ## goal
 
- - use javascript & html to create a minigame
-
-## requirement
-
- - [git-scm](https://git-scm.com/)
-
-## how to compile
-
-1. git clone https://github.com/matsurigoku/MiniGame.git
-
-2. mingw32-make
+ - practice tailwindcss
 
 ## members
 
