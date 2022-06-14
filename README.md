@@ -1,10 +1,8 @@
 # TailwindPractice
 
-We want to use tailwindcss to implement our existing project appearance. 
-
 ## goal
 
- - practice tailwindcss
+We want to use tailwindcss to implement our existing project appearance.
 
 ## members
 
