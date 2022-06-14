@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/snake.css">
+</head>
+
+<body>
+	<div class="container">
+        <div class="nametitle" id="nametitle">
+			<h1 style="font-size:25px; color:rgb(168, 151, 151); text-decoration:none"> 
+				Speak "up" "down" "left" "rignt" or use arrow button
+			</h1>
+	<div id="snake">
+	<!-- Our sketch will go here! -->
+	</div>
+		<div class="home" id="home">
+		<a href="./">🏠</a>
+	</div>
+	<div class="back" id="back">
+        <a href="./v.s.c.html">🔙</a>
+    </div>
+<script type="text/javascript">
+	window.AudioContext = (window.AudioContext || window.webkitAudioContext);
+	var globalAudioBuffer = null;
+	if (navigator.mediaDevices) {
+		console.log('getUserMedia supported.');
+
+		var constraints = {
+			audio: true
+		};
+		var chunks = [];
+		navigator.mediaDevices.getUserMedia(constraints)
+			.then(function(stream) {
+				//let stream = await navigator.mediaDevices.getUserMedia({ audio:true, video:false });
+				let mediaRecorder = new MediaRecorder(stream, {
+					mimeType: "video/webm"
+				});
+				var Btnrecord = document.getElementById('Btnrecord'),
+					Btnstop = document.getElementById('Btnstop'),
+					Btnplay = document.getElementById('Btnplay');
+				var r = false,
+					s = false;
+
+				Btnrecord.addEventListener('click', async function() {
+					mediaRecorder.start();
+					console.log(mediaRecorder.state);
+					console.log("recorder started");
+
+					mediaRecorder.ondataavailable = function(e) {
+						chunks.push(e.data);
+					}
+
+				});
+				Btnstop.addEventListener('click', function() {
+					mediaRecorder.stop();
+
+					console.log(mediaRecorder.state);
+					console.log("recorder stopped");
+				});
+				mediaRecorder.onstop = async function() {
+					console.log('Stopped, state = ' + mediaRecorder.state);
+
+					let blob = new Blob(chunks, {
+						type: mediaRecorder.mimeType
+					}); //+'; codecs=opus' });//
+					let audioURL = window.URL.createObjectURL(blob);
+					let arrayBuffer = await (await fetch(audioURL)).arrayBuffer();
+
+					try {
+						globalAudioBuffer = await (new AudioContext()).decodeAudioData(arrayBuffer);
+					} catch (e) {
+						alert("Sorry, your browser doesn't support a crucial feature needed to allow you to record using your device's microphone. You should use Chrome or Firefox if you want the best audio support, and ensure you're using the *latest version* of your browser of choice. Chrome and Firefox update automatically, but you may need to completely close down the browser and potentially restart your device to 'force' it to update itself to the latest version.");
+					}
+				}
+				Btnplay.addEventListener('click', async function() {
+					let outputAudioBuffer = await alien1Transform(globalAudioBuffer);
+					let outputWavBlob = URL.createObjectURL(bufferToWave(outputAudioBuffer, outputAudioBuffer.length));
+					let audio = document.createElement('audio');
+					audio.src = outputWavBlob;
+					document.body.appendChild(audio);
+					audio.play();
+				});
+				Btnalienbotplay.addEventListener('click', async function() {
+					let outputAudioBuffer1 = await alienRobot1Transform(globalAudioBuffer);
+					let outputWavBlob1 = URL.createObjectURL(bufferToWave(outputAudioBuffer1, outputAudioBuffer1.length));
+					let audio1 = document.createElement('audio');
+					audio1.src = outputWavBlob1;
+					document.body.appendChild(audio1);
+					audio1.play();
+				});
+				Btnreversetimeplay.addEventListener('click', async function() {
+					let outputAudioBuffer2 = await reverseTimeTransform(globalAudioBuffer);
+					let outputWavBlob2 = URL.createObjectURL(bufferToWave(outputAudioBuffer2, outputAudioBuffer2.length));
+					let audio2 = document.createElement('audio');
+					audio2.src = outputWavBlob2;
+					document.body.appendChild(audio2);
+					audio2.play();
+				});
+				Btnrobotplay.addEventListener('click', async function() {
+					let outputAudioBuffer3 = await robot1Transform(globalAudioBuffer);
+					let outputWavBlob3 = URL.createObjectURL(bufferToWave(outputAudioBuffer3, outputAudioBuffer3.length));
+					let audio3 = document.createElement('audio');
+					audio3.src = outputWavBlob3;
+					document.body.appendChild(audio3);
+					audio3.play();
+				});
+				Btnastronautplay.addEventListener('click', async function() {
+					let outputAudioBuffer4 = await astronautTransform(globalAudioBuffer);
+					let outputWavBlob4 = URL.createObjectURL(bufferToWave(outputAudioBuffer4, outputAudioBuffer4.length));
+					let audio4 = document.createElement('audio');
+					audio4.src = outputWavBlob4;
+					document.body.appendChild(audio4);
+					audio4.play();
+				});
+			});
+	}
+	
+</script>
+<script src="js/BufferToWav.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-migrate-3.0.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/jquery.waypoints.min.js"></script>
+<script src="js/jquery.stellar.min.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/aos.js"></script>
+<script src="js/jquery.animateNumber.min.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+<script src="js/jquery.timepicker.min.js"></script>
+<script src="js/scrollax.min.js"></script>
+<script src="js/p5.min.js"></script>
+<script src="js/p5.dom.min.js"></script>
+<script src="js/p5.dom.js"></script>
+<script src="js/p5.sound.min.js"></script>
+<script src="js/p5.sound.js"></script>
+<script src="js/p5.speech.js"></script>
+<script src="js/snake1.js"></script>
+<script src="js/snake2.js"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>-->
+<script src="js/main.js"></script>
+</body>
+</html>

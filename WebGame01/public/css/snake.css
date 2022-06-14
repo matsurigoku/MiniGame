@@ -1,0 +1,43 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: url("../res/background.jpg") no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    backdrop-filter: blur(7px)
+}
+
+
+
+.nametitle {
+    margin: center;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.home {
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    font-size: 1.5rem;
+}
+
+.home a {
+    text-decoration: none;
+}
+
+.back {
+    position: absolute;
+    top: 1rem;
+    left: 5rem;
+    font-size: 1.5rem;
+}
+
+.back a {
+    text-decoration: none;
+}

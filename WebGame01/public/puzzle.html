@@ -1,0 +1,414 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <title>PUZZLE</title>    
+	<style>
+		canvas {
+			width: 450px;
+			height: 450px;
+			border: 5px solid rgb(165, 165, 165);
+			margin: auto
+		}
+
+		.css_button {
+			padding: 8px 16px;
+			border: 1px solid #C7C7C7;
+			background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#A19F9F));
+			background: -webkit-linear-gradient(top, #FFFFFF, #A19F9F);
+			background: -moz-linear-gradient(top, #FFFFFF, #A19F9F);
+			background: -ms-linear-gradient(top, #FFFFFF, #A19F9F);
+			background: -o-linear-gradient(top, #FFFFFF, #A19F9F);
+			background-color: #A19F9F;
+			box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 3px #F2E1E1;
+			-webkit-box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 3px #F2E1E1;
+			-moz-box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 3px #F2E1E1;
+			-webkit-border-radius: 9px;
+			-moz-border-radius: 9px;
+			border-radius: 9px;
+			text-shadow: #000000 1px 1px 0px;
+			color: #785F5F;
+			font-size: 15px;
+			font-family: '微軟正黑體', Arial;
+			text-decoration: none;
+			font-weight: bold;
+			-webkit-transition: 0.2s;
+			-moz-transition: 0.2s;
+			-o-transition: 0.2s;
+			transition: 0.2s;
+			cursor: pointer;
+		}
+
+		.css_button:hover {
+			background: none;
+			background-color: #f7afaf;
+			box-shadow: 0px 0px 5px 0px #302d2d;
+			-webkit-box-shadow: 0px 0px 5px 0px #AAAAAA;
+			-moz-box-shadow: 0px 0px 5px 0px #502828;
+			border: 1px solid #ffffff;
+			color: #997777;
+		}
+
+		.css_button:active {
+			top: 1px;
+			position: relative;
+		}
+	</style>
+	
+
+    <link href="./css/puzzle-drager.css" rel="stylesheet">
+    <link href="./css/puzzle-style.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="home" id="home">
+        <a href="./">🏠</a>
+    </div>
+    <div id="top" style="width:1200px; margin:auto; margin-top:10px; text-align:center">
+        <header style="width:1190; height:30px;">
+            <h1 style="font-size:50px; margin:auto; text-align:center; color:rgb(156, 0, 0); text-shadow:2px 2px rgb(116, 78, 78);text-decoration:none">CLASSIC-PUZZLE-GAME</h1>
+        </header>
+        <div style="margin-top:10px; height:500px;">
+            <div>
+                <div style="width:50%; float:left; display:inline">
+                    <div style="text-align:center; height:30px">
+                        <h1 id="message"></h1>
+                    </div>
+                    <div style="text-align:center; height:30px">
+                        <h1 id="moves" class="moves" style="color:rgb(168, 151, 151)"  ></h1>
+						<h2 id="moves" class="moves" style="color:rgb(168, 151, 151)"  ></h2>
+                        <audio id="cheers" controls="none" preload="auto" style="display:none">
+							<source src="./media/aud.mp3" type="audio/mp3">
+						</audio>
+
+                        <audio id="cut" controls="none" preload="auto" style="display:none">
+							<source src="./media/cut.mp4" type="audio/mp4">
+						</audio>
+
+                        <audio id="no" controls="none" preload="auto" style="display:none">
+							<source src="./media/no.mp4" type="audio/mp4">
+						</audio>
+                    </div>
+                    <div>
+                        <canvas id="canvas" height="450px" width="450px" ></canvas>
+                    </div>
+                </div>
+				<div id="quitBtn" style="position:absolute;left: 400px; top:650px; font-size: 1rem; padding: 0.5rem;">
+					<button class="css_button">
+						Stop Game
+					</button> 
+				</div>
+                <div style="float: right; text-align:center; margin-right: 4rem;">
+                    <h1 style="font-size:42px; color:rgb(226, 154, 154); text-decoration:none">ORIGINAL IMAGE</h1>
+                    <canvas id="preview_image" class="upload_zone" width="450" height="450"></canvas>
+                    <h1 style="font-size:25px; color:rgb(168, 151, 151); text-decoration:none"> 
+                        (拖曳圖片到此可換圖)
+                    </h1>
+	
+                    <br/><input type="file" accept="image/*" onchange="uploadImage(this)">
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+		// 新增觸發到結束遊戲按鈕
+		document.getElementById("quitBtn").addEventListener("click", (e) => {
+			if (isPlaying) {
+				ctx.clearRect(0, 0, 450, 450);
+				ctx.font = "30px Arial";
+				ctx.fillStyle = "#ffffff";
+				ctx.fillText("Hit S to start the game", 80, 210);
+				restart = 1;
+				moves = -1;
+				mov = document.getElementById("moves");
+				mov.innerHTML = "";
+				isPlaying = false;
+				alert("遊戲終止!");
+			} else {
+				alert("遊戲未開始!");
+			}
+		});
+
+	var isPlaying = false;
+	const preview_image = document.getElementById("preview_image");
+	var previewctx = preview_image.getContext("2d");
+
+	// 存放原圖的物件
+	var previewImg = new Image();
+	previewImg.src = "./images/puzz.jpg";
+	previewImg.onload = function() {
+		previewctx.clearRect(0, 0, 450, 450);
+		previewctx.drawImage(previewImg, 0, 0, 450, 450);
+	}
+
+	// 上傳圖片
+	function uploadImage(imageInput) {
+		if(imageInput.files && imageInput.files[0]) {
+			previewImg.src = window.URL.createObjectURL(imageInput.files[0])
+		}
+	}
+
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+	var empty = 9;
+	var moves = -1;
+
+	function shuffle(array) {
+		var currentIndex = array.length,
+			temporaryValue, randomIndex;
+
+		// While there remain elements to shuffle...
+		while (0 !== currentIndex) {
+
+			// Pick a remaining element...
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
+
+			// And swap it with the current element.
+			temporaryValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = temporaryValue;
+		}
+
+		return array;
+	}
+	var ar = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+	im = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 0]);
+
+	for (var i = 0; i <= 8; i++) {
+		if (im[i] == 0)
+			empty = i + 1;
+	}
+
+	var restart = 0;
+
+	// 觸發獲勝
+	function won() {
+		ctx.clearRect(0, 0, 450, 450);
+		ctx.drawImage(previewImg, 0, 0, 450, 450);
+		m = document.getElementById("message");
+		m.innerHTML = "You won the game in " + moves.toString() + " moves";
+		au = document.getElementById("cheers");
+		au.play();
+		restart = 1;
+		moves = -1;
+		isPlaying = false;
+	}
+
+	function draw() {
+		moves++;
+		mov = document.getElementById("moves");
+		mov.innerHTML = "MOVES: " + moves.toString();
+		m = document.getElementById("message");
+		m.innerHTML = "";
+		var t;
+		t = 0;
+		if (restart == 1) {
+
+			im = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 0]);
+			for (var i = 0; i <= 8; i++) {
+				if (im[i] == 0)
+					empty = i + 1;
+			}
+
+			console.log(empty);
+			restart = 0;
+		}
+		for (var i = 0; i < 9; i++) {
+			if (im[i] != ar[i])
+				t = 1;
+		}
+		console.log(im);
+		console.log(ar);
+
+		ctx.clearRect(0, 0, 450, 450);
+
+		for (var i = 0; i < 3; i++) {
+			for (var j = 0; j < 3; j++) {
+				component(i, j);
+			}
+		}
+
+		console.log(t);
+
+		if (t == 0) {
+			console.log("one more");
+			won();
+		}
+
+	}
+
+	function component(x, y) {
+		var text = "puzz";
+		z = x + 3 * y;
+		z = im[z];
+		text = text + z.toString();
+		if (z != 0) {
+			const realx = Math.floor((z - 1) / 3);
+			const realy = Math.floor((z - 1) % 3);
+			var data = previewctx.getImageData(realy * 150, realx * 150, 150, 150);
+			var elem = document.getElementById(text);
+			ctx.putImageData(data, x * 150, y * 150);
+		} else {
+			ctx.fillStyle = "white";
+		}
+	}
+
+	// 上
+	function moveUp() {
+		ctx.clearRect(0, 0, 450, 450);
+		if (restart == 1) {
+			draw();
+			return;
+		}
+		if (empty == 9 || empty == 7 || empty == 8) {
+			au = document.getElementById("no");
+			au.play();
+			moves--;
+			draw();
+		} else {
+			au = document.getElementById("cut");
+			au.play();
+			text = "puzz";
+			var curr = empty;
+			empty = empty + 3;
+			var next = empty;
+			im[curr - 1] = im[next - 1];
+			im[next - 1] = 0;
+			draw();
+
+		}
+		console.log(empty);
+	}
+
+	// 下
+	function moveDown() {
+		ctx.clearRect(0, 0, 450, 450);
+		if (restart == 1) {
+
+			draw();
+			return;
+		}
+		if (empty == 1 || empty == 2 || empty == 3) {
+			au = document.getElementById("no");
+			au.play();
+			moves--;
+			draw();
+		} else {
+			au = document.getElementById("cut");
+			au.play();
+			text = "puzz";
+			var curr = empty;
+			empty = empty - 3;
+			var next = empty;
+			im[curr - 1] = im[next - 1];
+			im[next - 1] = 0;
+			draw();
+
+		}
+
+		console.log(empty);
+
+	}
+
+	// 左
+	function moveLeft() {
+		ctx.clearRect(0, 0, 450, 450);
+
+		if (restart == 1) {
+
+			draw();
+			return;
+		}
+
+		if (empty == 6 || empty == 9 || empty == 3) {
+			au = document.getElementById("no");
+			au.play();
+			moves--;
+			draw();
+		} else {
+			au = document.getElementById("cut");
+			au.play();
+			text = "puzz";
+			var curr = empty;
+			empty = empty + 1;
+			var next = empty;
+			im[curr - 1] = im[next - 1];
+			im[next - 1] = 0;
+			draw();
+
+
+		}
+		console.log(empty);
+	}
+
+	// 右
+	function moveRight() {
+		ctx.clearRect(0, 0, 450, 450);
+		if (restart == 1) {
+			moves--;
+			draw();
+			return;
+		}
+		if (empty == 1 || empty == 4 || empty == 7) {
+			au = document.getElementById("no");
+			au.play();
+			moves--;
+			draw();
+		} else {
+			au = document.getElementById("cut");
+			au.play();
+			text = "puzz";
+			var curr = empty;
+			empty = empty - 1;
+			var next = empty;
+			im[curr - 1] = im[next - 1];
+			im[next - 1] = 0;
+			draw();
+		}
+		console.log(empty);
+
+	}
+
+	// 按鍵觸發
+	window.addEventListener('keydown', function(e) {
+		key = e.keyCode;
+		if (key == 37) {
+			e.preventDefault();
+			moveLeft();
+		}
+		if (key == 38) {
+			e.preventDefault();
+			moveUp();
+		}
+		if (key == 39) {
+			e.preventDefault();
+			moveRight();
+		}
+		if (key == 40) {
+			e.preventDefault();
+			moveDown();
+		}
+		if (key == 83) {
+			e.preventDefault();
+			if(!isPlaying) {
+				start();
+			}
+		}
+
+	});
+
+	function start() {
+		isPlaying = true;
+		draw();
+	}
+	ctx.font = "30px Arial";
+	ctx.fillStyle = "#ffffff";
+	ctx.fillText("Hit S to start the game", 80, 210);
+    </script>
+    <script src="./js/puzzle-drager.js"></script>
+</body>
+
+</html>

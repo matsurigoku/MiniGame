@@ -1,0 +1,36 @@
+.winboard {
+    border-radius: 20px;
+    border: 3px solid rgb(124, 124, 124);
+    background: rgba(56, 3, 3, 0.835);
+    /* background-color: rgb(240, 132, 17); */
+    width: 500px;
+    max-width: 90%;
+    max-width: 90%;
+    padding: 0;
+}
+
+.winboard button {
+    position: relative;
+    border-radius: 15%;
+    margin-top: 40px;
+    margin-bottom: 0;
+    background-color: transparent;
+    border: 2px solid #614848;
+    color: rgb(207, 201, 201);
+}
+
+.winboard .title {
+    margin: auto;
+    padding: 10px;
+    font-size: xx-large;
+    text-align: center;
+    color: rgb(207, 201, 201);
+}
+
+.winboard .infobox {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    border: 2px solid #614848;
+    color: rgb(207, 201, 201);
+}
